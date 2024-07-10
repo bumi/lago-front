@@ -1362,6 +1362,7 @@ export enum CreditNoteRefundStatusEnum {
 }
 
 export enum CurrencyEnum {
+  Btc = 'BTC',
   /** United Arab Emirates Dirham */
   Aed = 'AED',
   /** Afghan Afghani */

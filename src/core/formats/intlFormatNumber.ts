@@ -1,4 +1,5 @@
 import { CurrencyEnum } from '~/generated/graphql'
+import { getCurrencyPrecision } from '~/core/serializers/serializeAmount'
 
 enum CurrencyDisplay {
   code = 'code',
@@ -32,12 +33,20 @@ export const intlFormatNumber: (amount: number, options?: FormatterOptions) => s
     ...otherOptions
   } = options || {}
 
-  return Number(formattedToUnit).toLocaleString('en-US', {
+  let formattedNumber = Number(formattedToUnit).toLocaleString('en-US', {
     style,
     currencyDisplay,
     currency,
     ...otherOptions,
-  })
+  });
+  const precision = getCurrencyPrecision(currency)
+
+  // toLocaleString does not have support for BTC for example
+  // so if the precision of that currency is 0 we remove potentail tailing zeros.
+  if (precision === 0) {
+    formattedNumber = formattedNumber.replace(/(\D)00$/, "");
+  }
+  return formattedNumber;
 }
 
 export const getCurrencySymbol = (currencyCode: CurrencyEnum) => {
