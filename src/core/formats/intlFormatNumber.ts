@@ -1,3 +1,4 @@
+import { getCurrencyPrecision } from '~/core/serializers/serializeAmount'
 import { LocaleEnum } from '~/core/translations'
 import { CurrencyEnum } from '~/generated/graphql'
 
@@ -50,7 +51,7 @@ export const intlFormatNumber: (amount: number, options?: FormatterOptions) => s
   }
 
   // For classic currencies or other styles formatting, we can use the native toLocaleString method
-  return Number(formattedToUnit).toLocaleString(locale, {
+  let formattedNumber = Number(formattedToUnit).toLocaleString(locale, {
     style,
     currencyDisplay,
     currency,
@@ -59,6 +60,13 @@ export const intlFormatNumber: (amount: number, options?: FormatterOptions) => s
       : {}),
     ...otherOptions,
   })
+
+  // Intl has no notion of BTC, so it pads the sats amount with 2 decimals.
+  if (getCurrencyPrecision(currency) === 0) {
+    formattedNumber = formattedNumber.replace(/(\D)00$/, '')
+  }
+
+  return formattedNumber
 }
 
 export const getCurrencySymbol = (currencyCode: CurrencyEnum) => {

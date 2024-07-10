@@ -3031,6 +3031,8 @@ export enum CurrencyEnum {
   Brl = 'BRL',
   /** Bahamian Dollar */
   Bsd = 'BSD',
+  /** Bitcoin (sats) */
+  Btc = 'BTC',
   /** Botswana Pula */
   Bwp = 'BWP',
   /** Belarusian Ruble */
